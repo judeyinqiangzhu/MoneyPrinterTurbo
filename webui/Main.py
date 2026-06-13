@@ -44,9 +44,56 @@ st.set_page_config(
 
 streamlit_style = """
 <style>
+/* ── 整体 ── */
+.block-container {
+    padding-top: 1rem !important;
+    padding-bottom: 2rem !important;
+    max-width: 1400px !important;
+}
 h1 {
     padding-top: 0 !important;
+    font-size: 1.6rem !important;
+    font-weight: 700 !important;
 }
+
+/* ── 按钮 ── */
+[data-testid="stBaseButton-primary"] {
+    background: linear-gradient(135deg, #6d28d9 0%, #4f46e5 100%) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 2px 12px rgba(109, 40, 217, 0.3) !important;
+}
+[data-testid="stBaseButton-primary"]:hover {
+    opacity: 0.9 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 20px rgba(109, 40, 217, 0.4) !important;
+}
+[data-testid="stBaseButton-secondary"] {
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+}
+
+/* ── 输入框 ── */
+[data-baseweb="input"] > div:first-child,
+[data-baseweb="textarea"] > div:first-child,
+[data-baseweb="select"] > div:first-child {
+    border-radius: 8px !important;
+}
+
+/* ── 折叠面板 ── */
+[data-testid="stExpander"] > details {
+    border-radius: 10px !important;
+}
+
+/* ── 提示框 ── */
+[data-testid="stAlert"] {
+    border-radius: 10px !important;
+}
+
+/* ── 隐藏 Streamlit 品牌 ── */
+footer { visibility: hidden; }
+#MainMenu { visibility: hidden; }
 </style>
 """
 st.markdown(streamlit_style, unsafe_allow_html=True)
@@ -122,6 +169,15 @@ support_locales = [
     "th-TH",
     "tr-TR",
 ]
+
+
+def section_header(label: str):
+    st.markdown(
+        f"<p style='margin:0 0 0.75rem 0;font-size:0.7rem;font-weight:700;"
+        f"text-transform:uppercase;letter-spacing:1.4px;color:#9ca3af;'>"
+        f"{label}</p>",
+        unsafe_allow_html=True,
+    )
 
 
 def get_all_fonts():
@@ -694,7 +750,7 @@ uploaded_audio_file = None
 
 with left_panel:
     with st.container(border=True):
-        st.write(tr("Video Script Settings"))
+        section_header(tr("Video Script Settings"))
         params.video_subject = st.text_input(
             tr("Video Subject"),
             key="video_subject",
@@ -801,7 +857,7 @@ with left_panel:
 
 with middle_panel:
     with st.container(border=True):
-        st.write(tr("Video Settings"))
+        section_header(tr("Video Settings"))
         video_concat_modes = [
             (tr("Sequential"), "sequential"),
             (tr("Random"), "random"),
@@ -937,7 +993,7 @@ with middle_panel:
             )
             config.app["video_codec"] = video_codec_options[selected_codec_index][1]
     with st.container(border=True):
-        st.write(tr("Audio Settings"))
+        section_header(tr("Audio Settings"))
 
         # 添加TTS服务器选择下拉框
         tts_servers = [
@@ -1224,7 +1280,7 @@ with middle_panel:
 
 with right_panel:
     with st.container(border=True):
-        st.write(tr("Subtitle Settings"))
+        section_header(tr("Subtitle Settings"))
         params.subtitle_enabled = st.checkbox(tr("Enable Subtitles"), value=True)
         font_names = get_all_fonts()
         saved_font_name = config.ui.get("font_name", "MicrosoftYaHeiBold.ttc")
